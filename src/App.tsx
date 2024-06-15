@@ -7,43 +7,43 @@ import { useState } from "react"
 //the gameId and the getGame in order to check whether UI is working
 
 
-// function calculateWinner({ squares }: { squares: any[] }) {
+function calculateWinner({ squares }: { squares: any[] }) {
 
 
-//   const lines = [
-//     //rows
-//     [0, 1, 2],
-//     [3, 4, 5],
-//     [6, 7, 8],
+  const lines = [
+    //rows
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
 
-//     //columns
-//     [0, 3, 6],
-//     [1, 4, 7],
-//     [2, 5, 8],
+    //columns
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
 
-//     //diagonals
-//     [0, 4, 8],
-//     [2, 4, 6]
-//   ];
+    //diagonals
+    [0, 4, 8],
+    [2, 4, 6]
+  ];
 
-//   //a for-loop will run for the length of that array
+  //a for-loop will run for the length of that array
 
-//   for (let i = 0; i < lines.length; i++) {
+  for (let i = 0; i < lines.length; i++) {
 
-//     //each array will be fragmented in three components, into a new array
-//     const [a, b, c] = lines[i];
+    //each array will be fragmented in three components, into a new array
+    const [a, b, c] = lines[i];
 
-//     //inside this level, if a exists, a = b, and a = c, that means that they are equivalent
+    //inside this level, if a exists, a = b, and a = c, that means that they are equivalent
 
-//     if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
+    if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
 
-//       //in that case, return squares[a] as the value for declarin the winner.
-//       //if the value is "X", X is the winner, if its "O", O is the winner
-//       return squares[a];
-//     }
-//   }
-//   return null;
-// }
+      //in that case, return squares[a] as the value for declarin the winner.
+      //if the value is "X", X is the winner, if its "O", O is the winner
+      return squares[a];
+    }
+  }
+  return null;
+}
 
 // function isXNext() {
 
@@ -77,6 +77,25 @@ export default function App() {
   const [whoIsWinner, setWhoIsWinner] = useState<string>("");
   // const [poller, setPoller] = useState<number>(0);
 
+
+
+
+  //declare path
+  const serverPath = "http://localhost:3004";
+
+
+
+  //get the game
+  const getGame = async (id: string) => {
+
+    const response = await fetch(`${serverPath}/games/${id}`)
+
+    const json = await response.json();
+    return json;
+  }
+
+
+
   //   //set the game
   useEffect(() => {
 
@@ -96,41 +115,31 @@ export default function App() {
 
 
 
-  const serverPath = "http://localhost:8080";
-
-
-  const getGame = async (id: string) => {
-    const gameId = "key1";
-
-    const response = await fetch(`${serverPath}/game/${id}`)
-    const json = await response.json();
-    return json;
-  }
 
 
   //make a move POST request
 
-  const makeAMove = async (id: string, index: number) => {
-    const response = await fetch(`http://localhost:8080/game/${id}/move`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({ index, playerId: "" }) // is the Index the emptyboard defined up?
-      // The body of the request is a JSON string containing the index of the move.
-      //This is where the client tells the server which position on the Tic Tac Toe
-      //board is being selected.
+  // const makeAMove = async (id: string, index: number) => {
+  //   const response = await fetch(`http://localhost:3004/game/${id}/move`, {
+  //     method: "POST",
+  //     headers: {
+  //       "Content-Type": "application/json"
+  //     },
+  //     body: JSON.stringify({ index, playerId: "" }) // is the Index the emptyboard defined up?
+  //     // The body of the request is a JSON string containing the index of the move.
+  //     //This is where the client tells the server which position on the Tic Tac Toe
+  //     //board is being selected.
 
-      //JSON exists as a string — useful when you want to transmit data across a network.
-      //It needs to be converted to a native JavaScript object when you want to access the data.
-      //This is not a big issue — JavaScript provides a global JSON object that has methods available
-      //for converting between the two.
+  //     //JSON exists as a string — useful when you want to transmit data across a network.
+  //     //It needs to be converted to a native JavaScript object when you want to access the data.
+  //     //This is not a big issue — JavaScript provides a global JSON object that has methods available
+  //     //for converting between the two.
 
-    })
-    const json = await response.json();
-    console.log(json);
-    return json;
-  }
+  //   })
+  //   const json = await response.json();
+  //   console.log(json);
+  //   return json;
+  // }
 
 
   //   //polling is when you ask for an update ever so often
@@ -140,23 +149,23 @@ export default function App() {
   // }, [poller]);
 
 
-  const handleClick = async (index: number) => {
-    const winner = calculateWinner({ squares });
-    if (winner) {
-      setWhoIsWinner(`${winner} is the winner!`);
-      return;
-    }
-    if (squares[index] === "") {
-      const newSquares = [...squares];
-      newSquares[index] = isXNext ? "X" : "O";
-      setSquare(newSquares);
-      setIsXNext(!isXNext)
-      const updatedGame = await makeAMove(gameId, index);
-      if (updatedGame.status === "completed" && updatedGame.winner) {
-        setWhoIsWinner(`${updatedGame.winner} is the winner!`);
-      }
-    }
-  };
+  // const handleClick = async (index: number) => {
+  //   const winner = calculateWinner({ squares });
+  //   if (winner) {
+  //     setWhoIsWinner(`${winner} is the winner!`);
+  //     return;
+  //   }
+  //   if (squares[index] === "") {
+  //     const newSquares = [...squares];
+  //     newSquares[index] = isXNext ? "X" : "O";
+  //     setSquare(newSquares);
+  //     setIsXNext(!isXNext)
+  //     const updatedGame = await makeAMove(gameId, index);
+  //     if (updatedGame.status === "completed" && updatedGame.winner) {
+  //       setWhoIsWinner(`${updatedGame.winner} is the winner!`);
+  //     }
+  //   }
+  // };
 
 
 
@@ -168,7 +177,7 @@ export default function App() {
       {/* <button onClickFunction={() => }></button> */}
       <div className="board">
         {squares.map((value, index) => (
-          <Square key={index} value={value} onClickFunction={() => handleClick(index)} />
+          <Square key={index} value={value} onClickFunction={() => "X"} />
         ))}
       </div>
       <h3>{whoIsWinner}</h3>

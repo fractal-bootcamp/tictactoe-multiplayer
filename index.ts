@@ -29,53 +29,6 @@ app.use(cors())
 
 
 
-const users = {
-    ["blahblah"]: {
-        name: "Jake",
-        job: "Chillin"
-    },
-    ["dfasdf"]: {
-        name: "Bruno",
-        job: "Chillin"
-    }
-}
-
-const usersAfterObjectEntries = [
-    ["blahblah", { name: "Jake", job: "Chillin" }]
-]
-
-
-
-
-const users2 = {
-    ["blahblah"]: {
-        name: "Jake",
-        job: "Chillin"
-    },
-    ["dfasdf"]: {
-        name: "Bruno",
-        job: "Chillin"
-    }
-}
-
-
-
-// app.get("/whatever/you/want/:name", (req, res) => {
-//     const name = req.params.name;
-//     const userst = Object.entries(users)
-
-//     console.log(userst)
-
-//     const user = userst.find(([id, user]) => user.name === name)
-
-
-//     console.log(user)
-//     // go look up a user by id
-
-
-//     res.json({ user: user?.[1] })
-// })
-
 // //Routes to interact with game state
 // // // gamestate
 
@@ -100,13 +53,13 @@ let games = {
 
 
 
-app.get("/", (req, res) => {
-    const game = req.params;
-    const listOfGames = Object.entries(games)
-    console.log(listOfGames)
+app.get("/games/:id", (req, res) => {
+    const id = req.params.id;
+    const game = games[id];
 
+    console.log(game)
 
-    res.json({ game: game?.[1] })
+    res.json(game)
 
 
     // const user = userst.find(([id, user]) => user.name === name)
@@ -123,23 +76,23 @@ app.get("/", (req, res) => {
 
 
 
-// this probably returns a game by id
-app.get("/game/:id", (req, res) => {
+// // this probably returns a game by id
+// app.get("/game/:id", (req, res) => {
 
-    const gameId = req.params.game;
-    console.log(gameId)
-    const game = games[gameId];
+//     const gameId = req.params.game;
+//     console.log(gameId)
+//     const game = games[gameId];
 
-    console.log("Game object:", game);
+//     console.log("Game object:", game);
 
-    if (!game) {
-        console.log("Game not found");
-        return res.status(404).send("Game not found");
-    } else {
-        console.log("Game found, sending response:", game);
-        return res.status(200).send(game);
-    }
-});
+//     if (!game) {
+//         console.log("Game not found");
+//         return res.status(404).send("Game not found");
+//     } else {
+//         console.log("Game found, sending response:", game);
+//         return res.status(200).send(game);
+//     }
+// });
 
 
 
