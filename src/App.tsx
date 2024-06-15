@@ -170,7 +170,7 @@ export default function App() {
     const initializeGame = async () => {
 
       //go get the game
-      const game = await getGameJSON("key1");
+      const game = await getGameJSON("blablabla");
 
       //store the game in state
       setSquares(game.board)
@@ -185,8 +185,11 @@ export default function App() {
   const handleClick = async (index: number) => {
     console.log(index)
 
-    makeAMove("g", index);
+    const game = await getGameJSON("blablabla");
 
+    makeAMove("blablabla", index);
+
+    setSquares(game.board)
   }
 
 

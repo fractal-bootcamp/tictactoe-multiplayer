@@ -92,6 +92,29 @@ app.get("/games/:id", (req, res) => {
     // res.json({ user: user?.[1] })
 })
 
+
+app.get("/games/:id/player1", (req, res) => {
+    const id = req.params.id;
+    const game = games[id];
+    const game2 = games['game2']
+
+    console.log(game)
+
+    res.json(game)
+
+
+    // const user = userst.find(([id, user]) => user.name === name)
+
+
+    // console.log(user)
+    // // go look up a user by id
+
+
+    // res.json({ user: user?.[1] })
+})
+
+
+
 app.post("/game/:id/move", (req, res) => {
     const id = req.params.id;
     const { index } = req.body;
@@ -102,6 +125,7 @@ app.post("/game/:id/move", (req, res) => {
     }
 
     res.json(game)
+
 
 
 }
