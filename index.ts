@@ -118,6 +118,12 @@ app.post("/game/:id/move", (req, res) => {
 
     }
 
+    if (game.board[index] != "") {
+        game.status = "Not a valid move!"
+    }
+
+
+
     //here check winner
 
 

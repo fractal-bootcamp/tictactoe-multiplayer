@@ -128,7 +128,7 @@ export default function App() {
   const [squares, setSquares] = useState<string[]>(Array(9).fill(""));
   // const [history, setHistory] = useState<string>("");
   const [isXNext, setIsXNext] = useState<boolean>(false);
-  const [whoIsWinner, setWhoIsWinner] = useState<string>("");
+  const [status, setStatus] = useState<string>("");
   // const [poller, setPoller] = useState<number>(0);
 
   //   //set the game
@@ -157,7 +157,10 @@ export default function App() {
 
     makeAMove("blablabla", index);
 
-    setSquares(game.board)
+    setSquares(game.board);
+
+    setStatus(game.status)
+
   }
 
 
@@ -203,7 +206,7 @@ export default function App() {
           }} />
         ))}
       </div>
-      <h3>{whoIsWinner}</h3>
+      <h3>{status}</h3>
     </div>
   );
 }
