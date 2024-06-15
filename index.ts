@@ -37,12 +37,24 @@ app.use(cors())
 // 
 
 // // // set the conditions of the game here, take them from the App
-
-
-let games = {
+type Token = "X" | "O"
+type Player = {
+    token: Token,
+    id: string
+}
+type Game = {
+    id: string,
+    board: string[]
+    player1: Player,
+    player2: Player,
+    currentPlayer: Token
+    winner: Token | null,
+    status: string
+}
+let games: Record<string, Game> = {
     key1: {
         id: "blablabla",
-        board: ["", "", "", "", "", "", "", "", ""],
+        board: ["", "", "", "", "x", "", "", "", ""],
         player1: { token: "X", id: "" },
         player2: { token: "O", id: "" },
         currentPlayer: "X",
@@ -50,7 +62,6 @@ let games = {
         status: ""
     }
 }
-
 
 
 app.get("/games/:id", (req, res) => {

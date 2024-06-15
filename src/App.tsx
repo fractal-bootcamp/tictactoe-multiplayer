@@ -70,6 +70,30 @@ function Square({ value, onClickFunction }: { value: any, onClickFunction: () =>
 }
 
 
+export type Token = "X" | "O"
+type Player = {
+  token: Token,
+  id: string
+}
+type GottenGame = {
+  id: string,
+  board: string[]
+  player1: Player,
+  player2: Player,
+  currentPlayer: Token
+  winner: Token | null,
+  status: string
+}
+//declare path
+const serverPath = "http://localhost:3004";
+//get the game
+const getGameJSON = async (id: string) => {
+
+  const response = await fetch(`${serverPath}/games/${id}`)
+
+  const json: GottenGame = await response.json();
+  return json;
+}
 export default function App() {
   const [squares, setSquare] = useState<string[]>(Array(9).fill(""));
   // const [history, setHistory] = useState<string>("");
@@ -77,41 +101,22 @@ export default function App() {
   const [whoIsWinner, setWhoIsWinner] = useState<string>("");
   // const [poller, setPoller] = useState<number>(0);
 
-
-
-
-  //declare path
-  const serverPath = "http://localhost:3004";
-
-
-
-  //get the game
-  const getGame = async (id: string) => {
-
-    const response = await fetch(`${serverPath}/games/${id}`)
-
-    const json = await response.json();
-    return json;
-  }
-
-
-
   //   //set the game
   useEffect(() => {
 
     const initializeGame = async () => {
 
       //go get the game
-      const game = await getGame("key1");
-
+      const game = await getGameJSON("key1");
 
       //store the game in state
-      setSquare(game.squares)
+      setSquare(game.board)
 
     }
 
     initializeGame();
   }, []);
+
 
 
 
