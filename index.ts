@@ -47,7 +47,7 @@ const usersAfterObjectEntries = [
 
 
 
-const users = {
+const users2 = {
     ["blahblah"]: {
         name: "Jake",
         job: "Chillin"
@@ -79,13 +79,15 @@ const users = {
 // //Routes to interact with game state
 // // // gamestate
 
-
+// ORDER OF OPERATIONS
+// get("/board")
+// 
 
 // // // set the conditions of the game here, take them from the App
 
 
 let games = {
-    ["key1"]: {
+    key1: {
         id: "blablabla",
         board: ["", "", "", "", "", "", "", "", ""],
         player1: { token: "X", id: "" },
@@ -105,6 +107,7 @@ app.get("/", (req, res) => {
 
 
     res.json({ game: game?.[1] })
+
 
     // const user = userst.find(([id, user]) => user.name === name)
 
