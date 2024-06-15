@@ -7,6 +7,7 @@ console.log("Hello via Bun!");
 import express from "express";
 
 import cors from "cors";
+// import express, { Request, Response } from 'express';
 
 const app = express();
 const port = 3004;
@@ -43,7 +44,6 @@ type Player = {
     id: string
 }
 type Game = {
-    id: string,
     board: string[]
     player1: Player,
     player2: Player,
@@ -52,11 +52,18 @@ type Game = {
     status: string
 }
 let games: Record<string, Game> = {
-    key1: {
-        id: "blablabla",
+    blablabla: {
         board: ["", "", "", "", "x", "", "", "", ""],
-        player1: { token: "X", id: "" },
-        player2: { token: "O", id: "" },
+        player1: { token: "X", id: "1" },
+        player2: { token: "O", id: "2" },
+        currentPlayer: "X",
+        winner: null,
+        status: ""
+    },
+    game2: {
+        board: ["", "", "", "", "x", "", "", "", ""],
+        player1: { token: "X", id: "1" },
+        player2: { token: "O", id: "2" },
         currentPlayer: "X",
         winner: null,
         status: ""
@@ -64,9 +71,11 @@ let games: Record<string, Game> = {
 }
 
 
+
 app.get("/games/:id", (req, res) => {
     const id = req.params.id;
     const game = games[id];
+    const game2 = games['game2']
 
     console.log(game)
 
@@ -83,40 +92,28 @@ app.get("/games/:id", (req, res) => {
     // res.json({ user: user?.[1] })
 })
 
+app.post("/game/:id/move", (req, res) => {
+    const id = req.params.id;
+    const { index } = req.body;
+    const game = games[id];
+
+    if (game.board[index] === "") {
+        game.board[index] = "X"
+    }
+
+    res.json(game)
 
 
+}
+)
 
 
-// // this probably returns a game by id
-// app.get("/game/:id", (req, res) => {
-
-//     const gameId = req.params.game;
-//     console.log(gameId)
-//     const game = games[gameId];
-
-//     console.log("Game object:", game);
-
-//     if (!game) {
-//         console.log("Game not found");
-//         return res.status(404).send("Game not found");
-//     } else {
-//         console.log("Game found, sending response:", game);
-//         return res.status(200).send(game);
-//     }
-// });
+app.listen(port, () => {
+    console.log(`Server started at http://localhost:${port}`);
+});
 
 
-
-// app.get("/", (req, res) => {
-//     res.send(
-//         JSON.stringify(games.key1.board)
-//     )
-// });
-
-
-
-
-// // // Move dynamics
+// // Move dynamics
 // app.post("/game/:id/move", express.json(), (req, res) => {
 //     const id = req.params.id;
 //     const { index } = req.body;
@@ -147,9 +144,66 @@ app.get("/games/:id", (req, res) => {
 //     }
 // });
 
+// // //move
+
+// // app.post("/game/:id/move", (req, res) => {
+// //     const id = req.params.id;
+// //     const games = games[id];
+
+// //     const { index } = req.body;
+
+// //     if (!game) {
+// //         return res.status(404).send("Game not found");
+// //     }
+
+// //     // const newBoard = [...board] //this needs to be coded in App.tsx first
+
+// //     //newBoard[index]=player
+// //     //setBoard(newBoard)
+
+// //     //togglePlayer();
+
+// //     const newBoard = game.board;
+// //     const player = game.currentPlayer;
+// //     newBoard[index] = player;
+// //     games.currentPlayer = player === "X" ? "O" : "X";
+
+// //     res.json({ game });
 
 
-// function calculateWinner({ squares }: { squares: any[] }) {
+// // //there is two ways of sending data: through URL and from the body
+// // // if you are sending complex data, use the body method
+// // //if only id, you can use URL parameters
+
+
+// // this probably returns a game by id
+// app.get("/game/:id", (req, res) => {
+
+//     const gameId = req.params.game;
+//     console.log(gameId)
+//     const game = games[gameId];
+
+//     console.log("Game object:", game);
+
+//     if (!game) {
+//         console.log("Game not found");
+//         return res.status(404).send("Game not found");
+//     } else {
+//         console.log("Game found, sending response:", game);
+//         return res.status(200).send(game);
+//     }
+// });
+
+
+
+// app.get("/", (req, res) => {
+//     res.send(
+//         JSON.stringify(games.key1.board)
+//     )
+// });
+
+
+//  calculateWinner({ squares }: { squares: any[] }) {
 
 
 //     const lines = [
@@ -187,47 +241,10 @@ app.get("/games/:id", (req, res) => {
 //     return null;
 // }
 
-// // Run the following command in the terminal to get the game object: curl localhost:5000/games/1
+// Run the following command in the terminal to get the game object: curl localhost:5000/games/1
 
-// // 
-
-
-// // //move
-
-// // app.post("/game/:id/move", (req, res) => {
-// //     const id = req.params.id;
-// //     const games = games[id];
-
-// //     const { index } = req.body;
-
-// //     if (!game) {
-// //         return res.status(404).send("Game not found");
-// //     }
-
-// //     // const newBoard = [...board] //this needs to be coded in App.tsx first
-
-// //     //newBoard[index]=player
-// //     //setBoard(newBoard)
-
-// //     //togglePlayer();
-
-// //     const newBoard = game.board;
-// //     const player = game.currentPlayer;
-// //     newBoard[index] = player;
-// //     games.currentPlayer = player === "X" ? "O" : "X";
-
-// //     res.json({ game });
-
-
-// // //there is two ways of sending data: through URL and from the body
-// // // if you are sending complex data, use the body method
-// // //if only id, you can use URL parameters
+// 
 
 
 
 // // // Check through the terminal how to update, and fetch, etc.
-
-
-app.listen(port, () => {
-    console.log(`Server started at http://localhost:${port}`);
-});

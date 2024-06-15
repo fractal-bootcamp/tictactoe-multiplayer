@@ -76,7 +76,6 @@ type Player = {
   id: string
 }
 type GottenGame = {
-  id: string,
   board: string[]
   player1: Player,
   player2: Player,
@@ -84,6 +83,8 @@ type GottenGame = {
   winner: Token | null,
   status: string
 }
+
+
 //declare path
 const serverPath = "http://localhost:3004";
 //get the game
@@ -94,8 +95,70 @@ const getGameJSON = async (id: string) => {
   const json: GottenGame = await response.json();
   return json;
 }
+
+// make a move
+// takes 2 arguments
+// first arg - id of string (game id) (key in the object of server games)
+// second arg - board position of the move we want to make
+const makeAMove = async (id: string, index: number) => {
+
+  // ALL FETCHES have a request and a response
+  //
+
+  const response = await fetch(`http://localhost:3004/game/${id}/move`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json"
+    },
+    body: JSON.stringify({ index })
+    // The body of the request is a JSON string containing the index of the move.
+    //This is where the client tells the server which position on the Tic Tac Toe
+    //board is being selected.
+
+    //JSON exists as a string — useful when you want to transmit data across a network.
+    //It needs to be converted to a native JavaScript object when you want to access the data.
+    //This is not a big issue — JavaScript provides a global JSON object that has methods available
+    //for converting between the two.
+
+  })
+
+  // pull the body out and format the response
+  const json = await response.json();
+  console.log(json);
+  return json;
+}
+
+
+//make a move POST request
+
+// const makeAMove = async (id: string, index: number) => {
+//   const response = await fetch(`http://localhost:3004/game/${id}/move`, {
+//     method: "POST",
+//     headers: {
+//       "Content-Type": "application/json"
+//     },
+//     body: JSON.stringify({ index, playerId: "" }) // is the Index the emptyboard defined up?
+//     // The body of the request is a JSON string containing the index of the move.
+//     //This is where the client tells the server which position on the Tic Tac Toe
+//     //board is being selected.
+
+//     //JSON exists as a string — useful when you want to transmit data across a network.
+//     //It needs to be converted to a native JavaScript object when you want to access the data.
+//     //This is not a big issue — JavaScript provides a global JSON object that has methods available
+//     //for converting between the two.
+
+//   })
+//   const json = await response.json();
+//   console.log(json);
+//   return json;
+// }
+
+
+
+
+
 export default function App() {
-  const [squares, setSquare] = useState<string[]>(Array(9).fill(""));
+  const [squares, setSquares] = useState<string[]>(Array(9).fill(""));
   // const [history, setHistory] = useState<string>("");
   const [isXNext, setIsXNext] = useState<boolean>(false);
   const [whoIsWinner, setWhoIsWinner] = useState<string>("");
@@ -110,7 +173,7 @@ export default function App() {
       const game = await getGameJSON("key1");
 
       //store the game in state
-      setSquare(game.board)
+      setSquares(game.board)
 
     }
 
@@ -119,32 +182,13 @@ export default function App() {
 
 
 
+  const handleClick = async (index: number) => {
+    console.log(index)
 
+    makeAMove("g", index);
 
+  }
 
-  //make a move POST request
-
-  // const makeAMove = async (id: string, index: number) => {
-  //   const response = await fetch(`http://localhost:3004/game/${id}/move`, {
-  //     method: "POST",
-  //     headers: {
-  //       "Content-Type": "application/json"
-  //     },
-  //     body: JSON.stringify({ index, playerId: "" }) // is the Index the emptyboard defined up?
-  //     // The body of the request is a JSON string containing the index of the move.
-  //     //This is where the client tells the server which position on the Tic Tac Toe
-  //     //board is being selected.
-
-  //     //JSON exists as a string — useful when you want to transmit data across a network.
-  //     //It needs to be converted to a native JavaScript object when you want to access the data.
-  //     //This is not a big issue — JavaScript provides a global JSON object that has methods available
-  //     //for converting between the two.
-
-  //   })
-  //   const json = await response.json();
-  //   console.log(json);
-  //   return json;
-  // }
 
 
   //   //polling is when you ask for an update ever so often
@@ -163,9 +207,10 @@ export default function App() {
   //   if (squares[index] === "") {
   //     const newSquares = [...squares];
   //     newSquares[index] = isXNext ? "X" : "O";
-  //     setSquare(newSquares);
+  //     setSquares(newSquares);
   //     setIsXNext(!isXNext)
-  //     const updatedGame = await makeAMove(gameId, index);
+
+  //     const updatedGame = await makeAMove;
   //     if (updatedGame.status === "completed" && updatedGame.winner) {
   //       setWhoIsWinner(`${updatedGame.winner} is the winner!`);
   //     }
@@ -182,7 +227,9 @@ export default function App() {
       {/* <button onClickFunction={() => }></button> */}
       <div className="board">
         {squares.map((value, index) => (
-          <Square key={index} value={value} onClickFunction={() => "X"} />
+          <Square key={index} value={value} onClickFunction={() => {
+            handleClick(index)
+          }} />
         ))}
       </div>
       <h3>{whoIsWinner}</h3>
