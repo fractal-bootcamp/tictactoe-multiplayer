@@ -45,19 +45,21 @@ function calculateWinner({ squares }: { squares: any[] }) {
   return null;
 }
 
-// function isXNext() {
+function isXNext() {
 
-//   let flip = true;
+  let value1 = "X";
 
-//   if (flip = true) {
-//     let value2 = "X"
-//   }
+  let flip = true;
 
-//   else
+  if (flip = true) {
+    let value2 = "X"
+  }
 
-//     let value1 = "O";
+  else
 
-// }
+    value1 = "O";
+
+}
 
 function Square({ value, onClickFunction }: { value: any, onClickFunction: () => void }) {
   return (
@@ -71,15 +73,11 @@ function Square({ value, onClickFunction }: { value: any, onClickFunction: () =>
 
 
 export type Token = "X" | "O"
-type Player = {
-  token: Token,
-  id: string
-}
+
 type GottenGame = {
   board: string[]
-  player1: Player,
-  player2: Player,
-  currentPlayer: Token
+  currentPlayer: Token,
+  isXNext: false,
   winner: Token | null,
   status: string
 }
@@ -115,11 +113,6 @@ const makeAMove = async (id: string, index: number) => {
     //This is where the client tells the server which position on the Tic Tac Toe
     //board is being selected.
 
-    //JSON exists as a string — useful when you want to transmit data across a network.
-    //It needs to be converted to a native JavaScript object when you want to access the data.
-    //This is not a big issue — JavaScript provides a global JSON object that has methods available
-    //for converting between the two.
-
   })
 
   // pull the body out and format the response
@@ -127,32 +120,6 @@ const makeAMove = async (id: string, index: number) => {
   console.log(json);
   return json;
 }
-
-
-//make a move POST request
-
-// const makeAMove = async (id: string, index: number) => {
-//   const response = await fetch(`http://localhost:3004/game/${id}/move`, {
-//     method: "POST",
-//     headers: {
-//       "Content-Type": "application/json"
-//     },
-//     body: JSON.stringify({ index, playerId: "" }) // is the Index the emptyboard defined up?
-//     // The body of the request is a JSON string containing the index of the move.
-//     //This is where the client tells the server which position on the Tic Tac Toe
-//     //board is being selected.
-
-//     //JSON exists as a string — useful when you want to transmit data across a network.
-//     //It needs to be converted to a native JavaScript object when you want to access the data.
-//     //This is not a big issue — JavaScript provides a global JSON object that has methods available
-//     //for converting between the two.
-
-//   })
-//   const json = await response.json();
-//   console.log(json);
-//   return json;
-// }
-
 
 
 
@@ -174,6 +141,7 @@ export default function App() {
 
       //store the game in state
       setSquares(game.board)
+
 
     }
 

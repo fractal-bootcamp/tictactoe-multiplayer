@@ -39,32 +39,28 @@ app.use(cors())
 
 // // // set the conditions of the game here, take them from the App
 type Token = "X" | "O"
-type Player = {
-    token: Token,
-    id: string
-}
+
+type isXNext = true | false
+
 type Game = {
     board: string[]
-    player1: Player,
-    player2: Player,
-    currentPlayer: Token
+    currentPlayer: Token,
+    isXNext: isXNext,
     winner: Token | null,
     status: string
 }
 let games: Record<string, Game> = {
     blablabla: {
-        board: ["", "", "", "", "x", "", "", "", ""],
-        player1: { token: "X", id: "1" },
-        player2: { token: "O", id: "2" },
+        board: ["", "", "", "", "", "", "", "", ""],
         currentPlayer: "X",
+        isXNext: false,
         winner: null,
         status: ""
     },
     game2: {
-        board: ["", "", "", "", "x", "", "", "", ""],
-        player1: { token: "X", id: "1" },
-        player2: { token: "O", id: "2" },
+        board: ["", "", "", "", "", "", "", "", ""],
         currentPlayer: "X",
+        isXNext: false,
         winner: null,
         status: ""
     }
@@ -93,36 +89,38 @@ app.get("/games/:id", (req, res) => {
 })
 
 
-app.get("/games/:id/player1", (req, res) => {
-    const id = req.params.id;
-    const game = games[id];
-    const game2 = games['game2']
-
-    console.log(game)
-
-    res.json(game)
-
-
-    // const user = userst.find(([id, user]) => user.name === name)
-
-
-    // console.log(user)
-    // // go look up a user by id
-
-
-    // res.json({ user: user?.[1] })
-})
-
-
-
+//move
 app.post("/game/:id/move", (req, res) => {
     const id = req.params.id;
     const { index } = req.body;
     const game = games[id];
+    const token = games.blablabla.currentPlayer;
+
 
     if (game.board[index] === "") {
-        game.board[index] = "X"
+
+
+        if (game.isXNext === false) {
+            game.board[index] = token
+            game.isXNext = true
+            game.currentPlayer = "O"
+
+        }
+
+        else if (game.isXNext === true) {
+            game.board[index] = token
+            game.isXNext = false
+            game.currentPlayer = "X"
+
+        }
+
+
+
     }
+
+    //here check winner
+
+
 
     res.json(game)
 
