@@ -67,6 +67,42 @@ let games: Record<string, Game> = {
 }
 
 
+function calculateWinner({ board }: { board: string[] }) {
+
+    const lines = [
+        //rows
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+
+        //columns
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+
+        //diagonals
+        [0, 4, 8],
+        [2, 4, 6]
+    ];
+
+    //a for-loop will run for the length of that array
+
+    for (let i = 0; i < lines.length; i++) {
+
+        //each array will be fragmented in three components, into a new array
+        const [a, b, c] = lines[i];
+
+        //inside this level, if a exists, a = b, and a = c, that means that they are equivalent
+
+        if (board[a] && board[a] === board[b] && board[a] === board[c]) {
+
+            //in that case, return squares[a] as the value for declarin the winner.
+            //if the value is "X", X is the winner, if its "O", O is the winner
+            return board[a];
+        }
+    }
+    return null;
+}
 
 app.get("/games/:id", (req, res) => {
     const id = req.params.id;
@@ -118,17 +154,16 @@ app.post("/game/:id/move", (req, res) => {
 
     }
 
-    if (game.board[index] != "") {
-        game.status = "Not a valid move!"
+    const winner = calculateWinner({ board: game.board });
+
+    if (winner != null) {
+        game.status = `${winner} is the winner`
+
     }
 
 
 
-    //here check winner
 
-
-
-    res.json(game)
 
 
 
